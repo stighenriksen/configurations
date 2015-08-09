@@ -4,6 +4,7 @@
     imports =   
       [ # Include the results of the hardware scan.
         ./hardware-configuration.nix
+        ./private/password.nix
       ];
       
   # Use the gummiboot efi boot loader.
@@ -93,7 +94,9 @@
        twoFingerScroll = true;
     }; 
   };
-    
+
+   users.mutableUsers = false;
+      
    users.extraUsers.stig = {
        group = "users";
        name = "stig";
