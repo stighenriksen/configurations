@@ -14,10 +14,15 @@
 
     boot.kernelPackages = pkgs.linuxPackages_3_19;
     boot.kernelModules = [ "kvm-intel" "iwlwifi" "iwldvm" ];
+
+  # http://unix.stackexchange.com/questions/163012/iwlwifi-timeout-delays-firmware-to-be-loaded
+     services.udev.extraRules = ''
+      SUBSYSTEM=="firmware", ACTION=="add", ATTR{loading}="-1"
+  '';
     
     networking.hostName = "stighenriksen-nixos"; # Define your hostname.
     networking.hostId = "eb210571";
-    networking.wireless.enable = true;
+    networking.wireless.enable = false;
     networking.wireless.interfaces = [ "wlp3s0" ];
     networking.interfaceMonitor.enable = true;
     networking.wicd.enable = true;
