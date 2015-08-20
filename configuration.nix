@@ -22,7 +22,7 @@
     
     networking.hostName = "stighenriksen-nixos"; # Define your hostname.
     networking.hostId = "eb210571";
-    networking.wireless.enable = false;
+    networking.wireless.enable = true;
     networking.wireless.interfaces = [ "wlp3s0" ];
     networking.interfaceMonitor.enable = true;
     networking.wicd.enable = true;
@@ -71,6 +71,7 @@
 
         displayManager.sessionCommands = ''
          sh /home/stig/.fehbg
+         ssh-add ~/.ssh/id_rsa
        '';
         
       windowManager.xmonad.enable = true;
@@ -115,6 +116,16 @@
   security.sudo.enable = true;
 
   programs.zsh.enable = true;
+
+   system.activationScripts.dotfiles = {
+    # Configure various dotfiles.
+    text = ''
+      cd /home/stig
+      #mkdir .nixpkgs 2>/dev/null || true
+      ln -fsn ${./dotfiles/xmonad} .xmonad
+    '';
+    deps = ["users"];
+    };
   
   
 } 
