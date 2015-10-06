@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+#llnix-shell --pure --command "ghc $*"d
+currentDir=$(pwd)
+fileName="shell.nix"
+while [[ "$currentDir" != "/" && ! -e "$fileName" ]]; do
+    if [ -f "$currentDir/$fileName" ];
+    then
+        file=$currentDir/$fileName
+        echo Found file: $file
+        nix-shell --pure --command "ghc-mod $*" $file
+        break;
+    else
+        currentDir=$(dirname "$currentDir")
+    fi
+done
