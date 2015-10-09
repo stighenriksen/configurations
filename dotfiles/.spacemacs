@@ -31,11 +31,12 @@
      react
      nixos
      java
-     shell
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
-     ;; syntax-checking
+      (shell :variables
+             shell-default-height 30
+             shell-default-position 'bottom
+             shell-default-shell 'ansi-term
+             shell-default-term-shell "/run/current-system/sw/bin/zsh" 
+             )
      version-control
      )
    ;; List of additional packages that will be installed without being
@@ -168,13 +169,11 @@ before layers configuration."
 (defun dotspacemacs/user-config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
-layerdfs configuration."
+layers configuration."
   (set 'flycheck-haskell-ghc-executable "nix-ghc")
   (set 'ghc-module-command "nix-ghc-mod")
   (setenv "NIX_PATH"
-          "/nix/var/nix/profiles/per-user/stig/channels/nixpkgs:nixpkgs=/nix/var/nix/profiles/per-user/stig/channels/nixpkgs:nixos-config=/etc/nixos/configuration.nix")
- ;df;
-)
+          "/nix/var/nix/profiles/per-user/stig/channels/nixpkgs:nixpkgs=/nix/var/nix/profiles/per-user/stig/channels/nixpkgs:nixos-config=/etc/nixos/configuration.nix"))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
