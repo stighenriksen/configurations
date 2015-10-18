@@ -11,7 +11,7 @@ sudo rsync --filter="protect /hardware-configuration.nix" \
            --filter="exclude .*.swp" \
            --filter="exclude Session.vim" \
            --delete --recursive --perms \
-           . /etc/nixos/
+           ./machines/w520/ /etc/nixos/
 
 if [ $# -eq 0 ]; then
   operation='switch'

@@ -12,7 +12,7 @@
     boot.loader.gummiboot.timeout = 4;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    boot.kernelPackages = pkgs.linuxPackages_3_19;
+  #  boot.kernelPackages = pkgs.linuxPackages_3_19;
     boot.kernelModules = [ "kvm-intel" "iwlwifi" "iwldvm" ];
 
   # http://unix.stackexchange.com/questions/163012/iwlwifi-timeout-delays-firmware-to-be-loaded
@@ -54,7 +54,14 @@
    };
 
    programs.ssh.startAgent = true;
-   
+   programs.ssh.extraConfig = ''
+     Host oldlinode
+       HostName 109.74.204.146 
+       User stig
+     Host linode
+       HostName 85.159.213.170
+       User stig
+   '';
    hardware.opengl.enable = true;
    hardware.opengl.driSupport = true;
    hardware.opengl.driSupport32Bit = true;
@@ -77,7 +84,7 @@
       windowManager.xmonad.enable = true;
 #      desktopManager.kde4.enable = true;
       windowManager.default = "xmonad";
-      windowManager.xmonad.extraPackages = haskellPackages: [ haskellPackages.taffybar haskellPackages.xmonadContrib haskellPackages.xmonadExtras ];
+      windowManager.xmonad.extraPackages = haskellPackages: [ haskellPackages.taffybar haskellPackages.xmonad-contrib haskellPackages.xmonad-extras ];
        deviceSection =
        		''
                  			Option "RegistryDwords" "EnableBrightnessControl=1"
@@ -117,15 +124,6 @@
 
   programs.zsh.enable = true;
 
-   system.activationScripts.dotfiles = {
-    # Configure various dotfiles.
-    text = ''
-      cd /home/stig
-      #mkdir .nixpkgs 2>/dev/null || true
-      ln -fsn ${./dotfiles/xmonad} .xmonad
-    '';
-    deps = ["users"];
-    };
-  
+     
   
 } 
