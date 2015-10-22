@@ -4,13 +4,18 @@
 
 { config, pkgs, ... }:
 
+let
+
+   
+   sshKeys = import ./private/ssh-keys.nix;
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./private/password.nix
     ];
- sshKeys = import ./private/ssh-keys.nix;
+    
  boot.kernelParams = [ "console=ttyS0" ];
  boot.loader.grub.extraConfig = "serial; terminal_input serial; terminal_output serial";
 
@@ -42,13 +47,33 @@ boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "v
   # ];
 
   # List services that you want to enable:
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-
-
-programs.zsh.enable = true;
+  programs.zsh.enable = true;
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  services.haproxy.enable = true;
+
+  services.haproxy.config = ''
+     global
+       daemon
+       maxconn 256
+
+     defaults
+       mode http
+       timeout connect 5000ms
+       timeout client 50000ms
+       timeout server 50000ms
+
+     frontend http-in
+       bind *:80
+       default_backend servers
+
+     backend servers
+       server server1 127.0.0.1:8000 maxconn 32
+'';
+  
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 

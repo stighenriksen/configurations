@@ -11,7 +11,7 @@ rsync --filter="protect /hardware-configuration.nix" \
      --filter="exclude .*.swp" \
      --filter="exclude Session.vim" \
      --delete --recursive --perms \
-     ./machines/w520/ linode:/home/stig/nixosconfig
+     ./machines/linode/ linode:/home/stig/nixosconfig/
 
 if [ $# -eq 0 ]; then
     operation='switch'
@@ -19,4 +19,4 @@ else
     operation=$1
 fi
 cd $wd
-ssh -t linode sudo rsync /home/stig/nixosconfig /etc/nixos/; sudo NIX_CURL_FLAGS='--retry=1000' nixos-rebuild --keep-failed $operation
+ssh -t linode sudo rsync -r /home/stig/nixosconfig/* /etc/nixos/; ssh -t linode sudo NIX_CURL_FLAGS='--retry=1000' nixos-rebuild --keep-failed $operation
