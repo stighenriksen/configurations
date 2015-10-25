@@ -6,7 +6,6 @@
 
 let
 
-   
    sshKeys = import ./private/ssh-keys.nix;
 in
 {
@@ -14,6 +13,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./private/password.nix
+      ./hydra/hydra-module.nix
     ];
     
  boot.kernelParams = [ "console=ttyS0" ];
@@ -47,8 +47,28 @@ boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "v
   # ];
 
   # List services that you want to enable:
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 3000 ];
 
+  # Hydra:
+  services.hydra = {
+  enable = true;
+  package = (import ./hydra/release.nix {}).build.x86_64-linux; # or i686-linux if appropriate.
+  hydraURL = "http://85.159.213.170:3000";
+  notificationSender = "hydra@stighenriksen.com";
+  };
+
+
+
+  services.postgresql.enable = true;
+  services.postgresql.package = pkgs.postgresql92;
+  services.postgresql.enableTCPIP = true;
+  services.postgresql.authentication = ''
+  # Generated file; do not edit!
+  local all all                trust
+  host  all all 127.0.0.1/32   trust
+  host  all all ::1/128        trust
+  host  all all 192.168.1.0/24 trust
+  '';
   programs.zsh.enable = true;
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -85,8 +105,7 @@ boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "v
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.kdm.enable = true;
   # services.xserver.desktopManager.kde4.enable = true;
-
-
+  swapDevices = [ { device = "/dev/sda3"; } ];
    users.mutableUsers = false; 
 users.defaultUserShell = "/run/current-system/sw/bin/zsh";       
    users.extraUsers.stig = { 
