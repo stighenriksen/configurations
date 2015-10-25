@@ -19,7 +19,18 @@
      services.udev.extraRules = ''
       SUBSYSTEM=="firmware", ACTION=="add", ATTR{loading}="-1"
   '';
-    
+
+
+  services.postgresql.enable = true;
+  services.postgresql.package = pkgs.postgresql92;
+  services.postgresql.enableTCPIP = true;
+  services.postgresql.authentication = ''
+  # Generated file; do not edit!
+   local all all                trust
+   host  all all 127.0.0.1/32   trust
+   host  all all ::1/128        trust
+   host  all all 192.168.1.0/24 trust
+            '';
     networking.hostName = "stighenriksen-nixos"; # Define your hostname.
     networking.hostId = "eb210571";
     networking.wireless.enable = true;
