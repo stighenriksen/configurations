@@ -42,9 +42,9 @@ boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "v
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
-  # environment.systemPackages = with pkgs; [
-  #   wget
-  # ];
+   environment.systemPackages = with pkgs; [
+     git
+   ];
 
   # List services that you want to enable:
   networking.firewall.allowedTCPPorts = [ 80 443 3000 ];
