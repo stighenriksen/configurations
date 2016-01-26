@@ -19,4 +19,4 @@ else
     operation=$1
 fi
 cd $wd
-ssh -t linode sudo rsync -r /home/stig/nixosconfig/* /etc/nixos/; ssh -t linode sudo NIX_CURL_FLAGS='--retry=1000' nixos-rebuild --keep-failed $operation
+ssh -t nixlinode sudo rsync -r /home/stig/nixosconfig/* /etc/nixos/; ssh -t linode sudo NIX_CURL_FLAGS='--retry=1000' nixos-rebuild --keep-failed $operation
