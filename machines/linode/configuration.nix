@@ -78,9 +78,10 @@ in
     frontend http-in
       bind *:80
       # define hosts
-      acl host_alkosalg hdr(host) -i alkosalg.no
-      acl host_hipadvisor hdr(host) -i hipadvisor.com
+      acl host_alkosalg hdr(host) -i api.alkosalg.no
+      acl host_jenkinsalkosalg hdr(host) -i dev.alkosalg.no
       use_backend alkosalg_cluster if host_alkosalg
+      use_backend jenkins_cluster if host_jenkinsalkosalg
       default_backend alkosalg_cluster
     frontend www-https
       bind *:443 ssl crt /home/stig/sslstuff/alkosalg.pem
@@ -94,6 +95,10 @@ in
       balance leastconn
       option forwardfor
       server node1 127.0.0.1:3005
+    backend jenkins_cluster
+      balance leastconn
+      option forwardfor
+      server node1 127.0.0.1:8080
    '';
    swapDevices = [ { device = "/dev/sda3"; } ];
    users.mutableUsers = false;
