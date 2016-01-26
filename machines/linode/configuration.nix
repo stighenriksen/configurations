@@ -96,34 +96,21 @@ in
       balance leastconn
       option forwardfor
       server node1 127.0.0.1:3005
-'';
-  
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.kdm.enable = true;
-  # services.xserver.desktopManager.kde4.enable = true;
-  swapDevices = [ { device = "/dev/sda3"; } ];
-   users.mutableUsers = false; 
-users.defaultUserShell = "/run/current-system/sw/bin/zsh";       
-   users.extraUsers.stig = { 
-       group = "users"; 
-       name = "stig"; 
-    createHome = true; 
-    home = "/home/stig"; 
-    extraGroups = [ "wheel" ]; 
-    uid = 1000; 
-    shell = "/run/current-system/sw/bin/zsh";
-    openssh.authorizedKeys.keys = [ sshKeys.stig ];
+   '';
+   swapDevices = [ { device = "/dev/sda3"; } ];
+   users.mutableUsers = false;
+   users.defaultUserShell = "/run/current-system/sw/bin/zsh";
+   users.extraUsers.stig = {
+     group = "users";
+     name = "stig";
+     createHome = true;
+     home = "/home/stig";
+     extraGroups = [ "wheel" ];
+     uid = 1000;
+     shell = "/run/current-system/sw/bin/zsh";
+     openssh.authorizedKeys.keys = [ sshKeys.stig ];
   };
 
-  # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "15.09";
 
 }
