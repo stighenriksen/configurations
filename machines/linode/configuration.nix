@@ -1,11 +1,6 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 let
-
    sshKeys = import ./private/ssh-keys.nix;
 in
 {
@@ -15,30 +10,19 @@ in
       ./private/password.nix
       ./hydra/hydra-module.nix
     ];
-    
- boot.kernelParams = [ "console=ttyS0" ];
- boot.loader.grub.extraConfig = "serial; terminal_input serial; terminal_output serial";
+  boot.kernelParams = [ "console=ttyS0" ];
+  boot.loader.grub.extraConfig = "serial; terminal_input serial; terminal_output serial";
 
-boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "9p" "9pnet_virtio" ];
-virtualisation.docker.enable = true;
+  boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "9p" "9pnet_virtio" ];
+  virtualisation.docker.enable = true;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
-  # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
   # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
-
-  # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "Europe/Oslo";
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
