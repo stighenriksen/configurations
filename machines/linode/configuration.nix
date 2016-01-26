@@ -5,7 +5,7 @@ let
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
       ./private/password.nix
       ./hydra/hydra-module.nix
@@ -15,7 +15,7 @@ in
 
   boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "9p" "9pnet_virtio" ];
   virtualisation.docker.enable = true;
-  # Use the GRUB 2 boot loader.
+
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
@@ -24,11 +24,9 @@ in
 
   time.timeZone = "Europe/Oslo";
 
-  # List packages installed in system profile. To search by name, run:
-  # $ nix-env -qaP | grep wget
-   environment.systemPackages = with pkgs; [
-     git
-   ];
+  environment.systemPackages = with pkgs; [
+    git
+  ];
 
   # List services that you want to enable:
   networking.firewall.allowedTCPPorts = [ 80 443 3000 5432 8080];
@@ -53,7 +51,7 @@ in
     host  all all 192.168.1.0/24 trust
   '';
   programs.zsh.enable = true;
-  # Enable the OpenSSH daemon.
+
   services.openssh.enable = true;
 
   services.jenkins.enable = true;
