@@ -35,22 +35,22 @@ in
 
   # Hydra:
   services.hydra = {
-  enable = true;
-  package = (import ./hydra/release.nix {}).build.x86_64-linux; # or i686-linux if appropriate.
-  hydraURL = "http://85.159.213.170:3000";
-  notificationSender = "hydra@stighenriksen.com";
+    enable = true;
+    package = (import ./hydra/release.nix {}).build.x86_64-linux; # or i686-linux if appropriate.
+    hydraURL = "http://85.159.213.170:3000";
+    notificationSender = "hydra@stighenriksen.com";
   };
 
   services.postgresql.enable = true;
   services.postgresql.package = pkgs.postgresql92;
   services.postgresql.enableTCPIP = true;
   services.postgresql.authentication = ''
-  # Generated file; do not edit!
-  local all all                trust
-  host  all all 127.0.0.1/32   trust
-  host  all all ::1/128        trust
-  host  all all 0.0.0.0/0 md5
-  host  all all 192.168.1.0/24 trust
+    # Generated file; do not edit!
+    local all all                trust
+    host  all all 127.0.0.1/32   trust
+    host  all all ::1/128        trust
+    host  all all 0.0.0.0/0 md5
+    host  all all 192.168.1.0/24 trust
   '';
   programs.zsh.enable = true;
   # Enable the OpenSSH daemon.
