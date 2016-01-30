@@ -26,7 +26,11 @@ in
 
   environment.systemPackages = with pkgs; [
     git
+    jdk
+    gradle
   ];
+
+  nixpkgs.config.allowUnfree = true; 
 
   # List services that you want to enable:
   networking.firewall.allowedTCPPorts = [ 80 443 3000 5432 8080];
