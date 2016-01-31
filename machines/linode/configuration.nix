@@ -73,8 +73,8 @@ in
   programs.zsh.enable = true;
 
   services.openssh.enable = true;
-
   services.jenkins.enable = true;
+  services.jenkins.packages = [ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ];
 
   services.haproxy.enable = true;
 
