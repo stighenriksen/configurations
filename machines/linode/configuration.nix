@@ -75,7 +75,9 @@ in
   services.openssh.enable = true;
   services.jenkins.enable = true;
   services.jenkins.packages = [ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ];
-
+  security.sudo.extraConfig = ''
+    jenkins ALL = NOPASSWD: /run/current-system/sw/bin/nixos-rebuild
+  '';
   services.haproxy.enable = true;
 
   services.haproxy.config = ''
