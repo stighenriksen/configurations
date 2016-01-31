@@ -2,6 +2,7 @@
 
 let
    sshKeys = import ./private/ssh-keys.nix;
+   hipadvisor = import ./hipadvisor_nix_pkg/default.nix { nixpkgs = pkgs; };
 in
 {
   imports =
@@ -28,6 +29,7 @@ in
     git
     jdk
     gradle
+    nodejs
   ];
 
   nixpkgs.config.allowUnfree = true; 
@@ -43,6 +45,20 @@ in
     notificationSender = "hydra@stighenriksen.com";
   };
 
+  # Hipadisor:
+  systemd.services.hipadvisor = {
+     after = [ "network.target" ];
+     wantedBy = [ "multi-user.target" ];
+     environment = { PORT = "8081"; };
+     serviceConfig = {
+        User = "jenkins";
+        Restart = "always";
+      };
+
+     script = ''
+       ${pkgs.jdk}/bin/java -jar ${hipadvisor}
+     '';
+  };
   services.postgresql.enable = true;
   services.postgresql.package = pkgs.postgresql92;
   services.postgresql.enableTCPIP = true;
@@ -75,8 +91,7 @@ in
       option  httplog
       option  dontlognull
       retries 3
-      
-option redispatch
+      option redispatch
       timeout connect  5000
       timeout client  10000
       timeout server  10000
@@ -85,11 +100,11 @@ option redispatch
       # define hosts
       acl host_alkosalg hdr(host) -i api.alkosalg.no
       acl host_jenkinsalkosalg hdr(host) -i jenkins.alkosalg.no
-      acl host_hipadvisor hdr(host) -i hipadvisor.com
+      acl host_devhipadvisor hdr(host) -i dev.hipadvisor.com
       acl host_jenkinshipadvisor hdr(host) -i jenkins.hipadvisor.com
       use_backend alkosalg_cluster if host_alkosalg
       use_backend jenkins_cluster if host_jenkinsalkosalg
-      use_backend hipadvisor_cluster if host_hipadvisor
+      use_backend devhipadvisor_cluster if host_devhipadvisor
       use_backend jenkins_cluster if host_jenkinshipadvisor
       default_backend alkosalg_cluster
     frontend www-https
@@ -108,7 +123,7 @@ option redispatch
       balance leastconn
       option forwardfor
       server node1 127.0.0.1:8080
-    backend hipadvisor_cluster
+    backend devhipadvisor_cluster
       balance leastconn
       option forwardfor
       server node1 127.0.0.1:8081
