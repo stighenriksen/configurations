@@ -3,6 +3,7 @@
 let
    sshKeys = import ./private/ssh-keys.nix;
    hipadvisor = import ./hipadvisor_nix_pkg/default.nix { nixpkgs = pkgs; };
+   alkosalg = import /var/lib/jenkins/jobs/alkosalg_build_master/workspace/server/build.nix {};
 in
 {
   imports =
@@ -15,7 +16,6 @@ in
   boot.loader.grub.extraConfig = "serial; terminal_input serial; terminal_output serial";
 
   boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "9p" "9pnet_virtio" ];
-  virtualisation.docker.enable = true;
 
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -30,6 +30,7 @@ in
     jdk
     gradle
     nodejs
+    alkosalg
   ];
 
   nixpkgs.config.allowUnfree = true; 
@@ -38,12 +39,12 @@ in
   networking.firewall.allowedTCPPorts = [ 80 443 3000 5432 8080];
 
   # Hydra:
-  services.hydra = {
-    enable = true;
-    package = (import ./hydra/release.nix {}).build.x86_64-linux; # or i686-linux if appropriate.
-    hydraURL = "http://85.159.213.170:3000";
-    notificationSender = "hydra@stighenriksen.com";
-  };
+#  services.hydra = {
+#    enable = true;
+#    package = (import ./hydra/release.nix {}).build.x86_64-linux; # or i686-linux if appropriate.
+#    hydraURL = "http://85.159.213.170:3000";
+#    notificationSender = "hydra@stighenriksen.com";
+#  };
 
   # Hipadisor:
   systemd.services.hipadvisor = {
@@ -58,6 +59,19 @@ in
      script = ''
        ${pkgs.jdk}/bin/java -jar ${hipadvisor}
      '';
+  };
+  systemd.services.alkosalg = {
+       after = [ "network.target" ];
+       wantedBy = [ "multi-user.target" ];
+       serviceConfig = {
+         User = "jenkins";
+         Restart = "always";
+       };
+
+       script = ''
+         cd ${alkosalg}
+         ./alkosalg Production
+       '';
   };
   services.postgresql.enable = true;
   services.postgresql.package = pkgs.postgresql92;
@@ -77,6 +91,7 @@ in
   services.jenkins.packages = [ pkgs.stdenv pkgs.git pkgs.jdk config.programs.ssh.package pkgs.nix ];
   security.sudo.extraConfig = ''
     jenkins ALL = NOPASSWD: /run/current-system/sw/bin/nixos-rebuild
+    jenkins ALL = NOPASSWD: /run/current-system/sw/bin/nix-env
   '';
   services.haproxy.enable = true;
 
@@ -120,7 +135,7 @@ in
       redirect scheme https if !{ ssl_fc }
       balance leastconn
       option forwardfor
-      server node1 127.0.0.1:3005
+      server node1 127.0.0.1:3000
     backend jenkins_cluster
       balance leastconn
       option forwardfor
@@ -130,7 +145,6 @@ in
       option forwardfor
       server node1 127.0.0.1:8081
    '';
-   swapDevices = [ { device = "/dev/sda3"; } ];
    users.mutableUsers = false;
    users.defaultUserShell = "/run/current-system/sw/bin/zsh";
    users.extraUsers.stig = {
