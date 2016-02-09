@@ -20,6 +20,7 @@
       SUBSYSTEM=="firmware", ACTION=="add", ATTR{loading}="-1"
   '';
 
+  time.timeZone = "Europe/Oslo";
 
   services.postgresql.enable = true;
   services.postgresql.package = pkgs.postgresql92;
