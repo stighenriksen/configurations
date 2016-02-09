@@ -37,7 +37,7 @@
     networking.wireless.enable = true;
     networking.wireless.interfaces = [ "wlp3s0" ];
     networking.interfaceMonitor.enable = true;
-    networking.wicd.enable = true;
+    networking.wicd.enable = false;
     
     i18n = {
       consoleFont = "lat9w-16";
