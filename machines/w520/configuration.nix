@@ -22,6 +22,14 @@
 
   time.timeZone = "Europe/Oslo";
 
+  systemd.services.redshift = {
+    wantedBy = [ "multi-user.target"];
+    environment = { DISPLAY = ":0"; };
+    script = ''
+      ${pkgs.redshift}/bin/redshift -l 59:11
+    '';
+  };
+
   services.postgresql.enable = true;
   services.postgresql.package = pkgs.postgresql92;
   services.postgresql.enableTCPIP = true;
@@ -52,7 +60,7 @@
     
    environment.systemPackages = with pkgs; [
      wget emacs chromium acpi xsel git haskellPackages.taffybar dmenu
-     nix-repl haskellPackages.cabal2nix
+     nix-repl redshift haskellPackages.cabal2nix
    ];
 
      fonts = {
