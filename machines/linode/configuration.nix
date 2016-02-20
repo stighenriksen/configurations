@@ -92,6 +92,7 @@ in
   security.sudo.extraConfig = ''
     jenkins ALL = NOPASSWD: /run/current-system/sw/bin/nixos-rebuild
     jenkins ALL = NOPASSWD: /run/current-system/sw/bin/nix-env
+    jenkins ALL = NOPASSWD: /run/current-system/sw/bin/system-ctl
   '';
   services.haproxy.enable = true;
 
