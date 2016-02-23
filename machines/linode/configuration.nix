@@ -30,6 +30,7 @@ in
     jdk
     gradle
     nodejs
+    imagemagick
     alkosalg
   ];
 
