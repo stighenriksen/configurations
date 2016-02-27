@@ -159,6 +159,16 @@ in
      shell = "/run/current-system/sw/bin/zsh";
      openssh.authorizedKeys.keys = [ sshKeys.stig ];
   };
+   users.extraUsers.magne = {
+     group = "users";
+     name = "magne";
+     createHome = true;
+     home = "/home/magne";
+     extraGroups = [ "wheel" ];
+     uid = 1001;
+     shell = "/run/current-system/sw/bin/zsh";
+     openssh.authorizedKeys.keys = [ sshKeys.magne ];
+   };
 
   system.stateVersion = "15.09";
 
