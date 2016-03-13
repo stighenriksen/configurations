@@ -88,6 +88,7 @@
    
     hardware.bumblebee.enable = false;
     
+    fonts.fontconfig.dpi = 141;
     services.xserver = {
         videoDrivers = [ "nvidia" ];
        enable = true;
