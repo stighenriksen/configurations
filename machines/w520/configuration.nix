@@ -42,9 +42,9 @@
             '';
     networking.hostName = "stighenriksen-nixos"; # Define your hostname.
     networking.hostId = "eb210571";
-    networking.wireless.enable = true;
+   # networking.wireless.enable = true;
     networking.wireless.interfaces = [ "wlp3s0" ];
-    networking.interfaceMonitor.enable = true;
+    #networking.interfaceMonitor.enable = true;
     networking.wicd.enable = false;
     
     i18n = {
@@ -95,13 +95,15 @@
       layout = "us";
         displayManager.desktopManagerHandlesLidAndPower = false;
 
-        displayManager.kdm.enable = true;
 
         displayManager.sessionCommands = ''
          sh /home/stig/.fehbg
          ssh-add ~/.ssh/id_rsa
        '';
         
+
+        #displayManager.kdm.enable = true;
+          desktopManager.gnome3.enable = true;
       windowManager.xmonad.enable = true;
 #      desktopManager.kde4.enable = true;
       windowManager.default = "xmonad";
