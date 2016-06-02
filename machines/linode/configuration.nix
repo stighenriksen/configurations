@@ -121,7 +121,7 @@ in
       acl host_jenkinsalkosalg hdr(host) -i jenkins.alkosalg.no
       acl host_devhipadvisor hdr(host) -i dev.hipadvisor.com
       acl host_jenkinshipadvisor hdr(host) -i jenkins.hipadvisor.com
-      use_backend alkosalg_cluster if host_alkosalg
+      use_backend devhipadvisor_cluster if host_alkosalg
       use_backend jenkins_cluster if host_jenkinsalkosalg
       use_backend devhipadvisor_cluster if host_devhipadvisor
       use_backend jenkins_cluster if host_jenkinshipadvisor
@@ -129,10 +129,10 @@ in
     frontend www-https
       bind *:443 ssl crt /home/stig/sslstuff/alkosalg.pem
       reqadd X-Forwarded-Proto:\ https
-      default_backend alkosalg_cluster
+      default_backend devhipadvisor_cluster
       acl host_alkosalg hdr(host) -i alkosalg.no
-      use_backend alkosalg_cluster if host_alkosalg
-      default_backend alkosalg_cluster
+      use_backend devhipadvisor_cluster if host_alkosalg
+      default_backend devhipadvisor_cluster
     backend alkosalg_cluster
       redirect scheme https if !{ ssl_fc }
       balance leastconn
